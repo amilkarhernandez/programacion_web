@@ -72,8 +72,93 @@ function findByIdentify(req, res){
 
 }
 
+function find_by_id(req, res){
+    const id = req.params['id']
+
+    Clients.findById({_id: id})
+    .then((resp)=>{
+        if(resp){
+            res.status(200).send({
+                status: 200,
+                message: "Cliente Encontrado con exito",
+                result: resp
+            })
+        }else{
+            res.status(404).send({
+                status: 404,
+                message: "Cliente No Encontrado"
+            })
+        }
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send({
+            status: 500,
+            message: "Ocurrio un erorr en el servidor"
+        })
+    })
+}
+
+function actualizar(req, res){
+
+    const {id, identify, name, lastname, telephone, age} = req.body;
+
+    Clients.findByIdAndUpdate({_id: id}, {identify: identify, name: name, lastname: lastname, telephone: telephone, age: age})
+    .then((resp)=>{
+        if(resp){
+            res.status(200).send({
+                status: 200,
+                message: "Cliente Actualizado con exito",
+                result: resp
+            })
+        }else{
+            res.status(302).send({
+                status: 302,
+                message: "El cliente no se pudo actualizar"
+            })
+        }
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send({
+            status: 500,
+            message: "Ocurrio un erorr en el servidor"
+        })
+    })
+
+}
+
+function eliminar(req, res){
+    const id = req.params['id']
+
+    Clients.findByIdAndDelete({_id: id})
+    .then((resp)=>{
+        if(resp){
+            res.status(200).send({
+                status: 200,
+                message: "Cliente Eliminado con exito"
+            })
+        }else{
+            res.status(302).send({
+                status: 302,
+                message: "El cliente no se pudo Eliminar"
+            })
+        }
+    })
+    .catch((err)=>{
+        console.log(err)
+        res.status(500).send({
+            status: 500,
+            message: "Ocurrio un erorr en el servidor"
+        })
+    })
+}
+
 module.exports = {
     listar,
     create,
-    findByIdentify
+    findByIdentify,
+    find_by_id,
+    actualizar,
+    eliminar
 }
